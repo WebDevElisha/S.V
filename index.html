@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S.V</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-[#08080a] text-[#e0aaff] min-h-screen flex flex-col justify-center items-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-[#08080a] to-[#08080a]">
+
+  <div class="flex flex-col items-center gap-12 z-10">
+    <div class="text-center animate-float">
+      <h1 class="text-8xl font-black tracking-wider text-white drop-shadow-[0_0_35px_rgba(168,85,247,0.85)]">S.V</h1>
+    </div>
+
+    <nav class="flex gap-6 bg-[#0f0f14]/80 p-5 rounded-3xl border border-purple-500/30 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+      <button class="flex flex-col items-center justify-center w-24 h-24 bg-white/[0.03] border border-purple-500/30 rounded-2xl text-[#e0aaff] gap-2 transition-all duration-300 hover:-translate-y-2 hover:bg-purple-600/20 hover:border-purple-500 hover:text-white hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] group cursor-pointer">
+        <i data-lucide="gamepad-2" class="w-7 h-7 stroke-[2] transition-transform duration-300 group-hover:scale-110"></i>
+        <span class="text-xs font-bold tracking-widest uppercase">Games</span>
+      </button>
+
+      <button class="flex flex-col items-center justify-center w-24 h-24 bg-white/[0.03] border border-purple-500/30 rounded-2xl text-[#e0aaff] gap-2 transition-all duration-300 hover:-translate-y-2 hover:bg-purple-600/20 hover:border-purple-500 hover:text-white hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] group cursor-pointer">
+        <i data-lucide="clapperboard" class="w-7 h-7 stroke-[2] transition-transform duration-300 group-hover:scale-110"></i>
+        <span class="text-xs font-bold tracking-widest uppercase">Movies</span>
+      </button>
+
+      <button class="flex flex-col items-center justify-center w-24 h-24 bg-white/[0.03] border border-purple-500/30 rounded-2xl text-[#e0aaff] gap-2 transition-all duration-300 hover:-translate-y-2 hover:bg-purple-600/20 hover:border-purple-500 hover:text-white hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] group cursor-pointer">
+        <i data-lucide="layout-grid" class="w-7 h-7 stroke-[2] transition-transform duration-300 group-hover:scale-110"></i>
+        <span class="text-xs font-bold tracking-widest uppercase">Apps</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
