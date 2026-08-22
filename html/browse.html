@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S.V - Browse</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/browse.css">
+</head>
+<body class="bg-[#06040a] text-white min-h-screen flex flex-col items-center pt-20 relative fade-in-up">
+
+  <div class="aurora-container">
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+    <div class="aurora aurora-3"></div>
+  </div>
+
+  <div class="z-10 w-full max-w-6xl px-4 flex flex-col items-center">
+    
+    <div class="w-full bg-[#0f0921]/90 backdrop-blur-xl border border-purple-500/40 rounded-2xl browser-window flex flex-col">
+      
+      <div class="flex items-center px-2 pt-2 gap-2 bg-[#0a0614]">
+        <div class="flex items-center gap-3 bg-[#1a1033] border border-purple-500/30 border-b-0 px-4 py-2 rounded-t-xl min-w-[180px] justify-between browser-tab">
+          <span class="text-xs font-bold text-purple-200 tracking-wide">New Tab</span>
+          <button class="text-purple-400 hover:text-white transition-colors">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 p-3 bg-[#130b29] border-b border-purple-500/30 rounded-tr-2xl">
+        <div class="flex items-center gap-2 text-purple-300">
+          <button class="hover:text-white hover:bg-purple-500/20 p-2 rounded-lg transition-all nav-btn">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </button>
+          <button class="hover:text-white hover:bg-purple-500/20 p-2 rounded-lg transition-all nav-btn">
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+          <button class="hover:text-white hover:bg-purple-500/20 p-2 rounded-lg transition-all nav-btn">
+            <i data-lucide="rotate-cw" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="flex-1 flex items-center bg-[#0a0614] border border-purple-500/40 rounded-xl px-5 py-3 search-bar-inner">
+          <i data-lucide="search" class="w-4 h-4 text-purple-400 mr-3"></i>
+          <input type="text" placeholder="Search or enter address" class="bg-transparent w-full outline-none text-sm text-purple-100 placeholder-purple-500/50 font-medium tracking-wide">
+        </div>
+      </div>
+
+      <div class="h-[650px] flex flex-col items-center justify-center bg-[#06040a]/70 rounded-b-2xl relative overflow-hidden">
+        
+        <div class="flex flex-col items-center justify-center z-10 animate-float">
+          <h1 class="text-8xl md:text-9xl font-black tracking-widest text-white glow-title select-none mb-4">
+            S.V
+          </h1>
+          <p class="text-purple-300 tracking-[0.25em] uppercase text-sm font-bold drop-shadow-[0_0_10px_rgba(168,85,247,0.8)] bg-black/40 px-6 py-2 rounded-full border border-purple-500/20">
+            browse thru S.V!
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <button id="openOverlay" class="fixed bottom-6 right-6 z-20 flex items-center justify-center w-14 h-14 bg-purple-900/40 border border-purple-500/50 rounded-2xl text-purple-200 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-500 hover:scale-110 hover:rotate-180 hover:bg-purple-600/30 hover:border-purple-400 hover:text-white hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] cursor-pointer menu-spin">
+    <i data-lucide="menu" class="w-7 h-7"></i>
+  </button>
+
+  <div id="overlay" class="fixed inset-0 z-30 bg-[#080511]/85 backdrop-blur-xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-all duration-400">
+    
+    <button id="closeOverlay" class="absolute top-8 right-8 text-purple-300/70 hover:text-white hover:scale-110 transition-all duration-300 cursor-pointer">
+      <i data-lucide="x" class="w-9 h-9"></i>
+    </button>
+
+    <div class="bg-[#0f0921]/70 p-8 md:p-10 rounded-3xl border border-purple-500/30 shadow-[0_0_50px_rgba(147,51,234,0.25)] flex flex-col items-center gap-6 max-w-sm w-full mx-4">
+      
+      <h2 class="text-xs font-bold tracking-[0.3em] uppercase text-purple-300/60 mb-2">Navigation</h2>
+
+      <div class="grid grid-cols-2 gap-4 w-full">
+        <a href="#" class="nav-card group">
+          <i data-lucide="gamepad-2" class="nav-icon"></i>
+          <span class="nav-label">Games</span>
+        </a>
+
+        <a href="#" class="nav-card group">
+          <i data-lucide="clapperboard" class="nav-icon"></i>
+          <span class="nav-label">Movies</span>
+        </a>
+
+        <a href="browse.html" class="nav-card group">
+          <i data-lucide="compass" class="nav-icon"></i>
+          <span class="nav-label">Browse</span>
+        </a>
+
+        <a href="#" class="nav-card group">
+          <i data-lucide="message-square" class="nav-icon"></i>
+          <span class="nav-label">Chat</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../js/script.js"></script>
+  <script src="../js/browse.js"></script>
+</body>
+</html>
