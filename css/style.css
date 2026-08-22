@@ -7,6 +7,21 @@
   animation: float 5s ease-in-out infinite;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 .glow-title {
   text-shadow: 
     0 0 20px rgba(168, 85, 247, 0.6),
@@ -73,6 +88,7 @@
   color: #e0aaff;
   gap: 0.5rem;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -105,4 +121,13 @@
 .overlay-active {
   opacity: 1 !important;
   pointer-events: auto !important;
+}
+
+.menu-spin:hover i {
+  animation: spinMenu 1s ease-in-out forwards;
+}
+
+@keyframes spinMenu {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
