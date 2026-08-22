@@ -10,9 +10,15 @@
 .browser-tab {
   transition: background-color 0.2s ease, color 0.2s ease;
   position: relative;
+  cursor: pointer;
 }
 
-.browser-tab::after {
+.browser-tab.active-tab {
+  background-color: #130b29;
+  border-bottom-color: #130b29;
+}
+
+.browser-tab.active-tab::after {
   content: '';
   position: absolute;
   top: 0;
@@ -22,10 +28,10 @@
   background: linear-gradient(90deg, #9333ea, #c084fc);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  opacity: 0.8;
+  opacity: 1;
 }
 
-.browser-tab:hover {
+.browser-tab:not(.active-tab):hover {
   background-color: rgba(168, 85, 247, 0.15);
 }
 
@@ -43,19 +49,10 @@
   transform: scale(0.9);
 }
 
-::-webkit-scrollbar {
-  width: 10px;
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-::-webkit-scrollbar-track {
-  background: #06040a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #7e22ce;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #9333ea;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
