@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const newTab = {
       id: tabId,
       url: '',
-      title: 'New Tab'
+      title: 'New Tab',
+      displayUrl: ''
     };
     tabs.push(newTab);
     renderTabs();
@@ -49,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (browserFrame.src !== activeTab.url) {
         browserFrame.src = activeTab.url;
       }
-      urlInput.value = activeTab.url;
+      urlInput.value = activeTab.displayUrl;
     } else {
       welcomeScreen.classList.remove('hidden');
       browserFrame.classList.add('hidden');
@@ -90,20 +91,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   urlInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      let url = urlInput.value.trim();
-      if (url) {
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-          if (url.includes('.') && !url.includes(' ')) {
-            url = 'https://' + url;
-          } else {
-            url = 'https://www.google.com/search?q=' + encodeURIComponent(url);
-          }
-        }
+      let inputVal = urlInput.value.trim();
+      if (inputVal) {
+        let finalUrl = '';
         
+        if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
+          if (inputVal.includes('.') && !inputVal.includes(' ')) {
+            finalUrl = 'https://' + inputVal;
+          } else {
+            finalUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
+          }
+        } else {
+          finalUrl = inputVal;
+        }
+
+        let proxyUrl = finalUrl;
+        if (typeof __uv$config !== 'undefined') {
+          proxyUrl = __uv$config.prefix + __uv$config.encodeUrl(finalUrl);
+        }
+
         const activeTab = tabs.find(t => t.id === activeTabId);
         if (activeTab) {
-          activeTab.url = url;
-          activeTab.title = url;
+          activeTab.url = proxyUrl;
+          activeTab.displayUrl = inputVal;
+          activeTab.title = inputVal;
           switchTab(activeTabId);
         }
       }
