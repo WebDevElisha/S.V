@@ -1,22 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   lucide.createIcons();
 
-  const openBtn = document.getElementById("openOverlay");
-  const closeBtn = document.getElementById("closeOverlay");
-  const overlay = document.getElementById("overlay");
+  const homeSearchForm = document.getElementById("home-search-form");
+  const homeSearchInput = document.getElementById("home-search-input");
 
-  if (openBtn && closeBtn && overlay) {
-    openBtn.addEventListener("click", () => {
-      overlay.classList.add("overlay-active");
-    });
-
-    closeBtn.addEventListener("click", () => {
-      overlay.classList.remove("overlay-active");
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && overlay.classList.contains("overlay-active")) {
-        overlay.classList.remove("overlay-active");
+  if (homeSearchForm && homeSearchInput) {
+    homeSearchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const query = homeSearchInput.value.trim();
+      if (query) {
+        window.location.href = `html/browse.html?q=${encodeURIComponent(query)}`;
       }
     });
   }
