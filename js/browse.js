@@ -11,15 +11,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnReload = document.getElementById('btn-reload');
   const btnBack = document.getElementById('btn-back');
   const btnForward = document.getElementById('btn-forward');
+  const toggleHeaderBtn = document.getElementById('toggle-header');
+  const floatingHeader = document.getElementById('floating-header');
 
-  function createTab() {
+  let isHeaderHidden = false;
+
+  toggleHeaderBtn.addEventListener('click', () => {
+    isHeaderHidden = !isHeaderHidden;
+    floatingHeader.classList.toggle('header-hidden', isHeaderHidden);
+    const icon = toggleHeaderBtn.querySelector('i');
+    icon.setAttribute('data-lucide', isHeaderHidden ? 'chevron-down' : 'chevron-up');
+    lucide.createIcons();
+  });
+
+  function createTab(initialUrl = '', initialTitle = 'S.V TAB', initialDisplay = '') {
     tabCounter++;
     const tabId = `tab-${tabCounter}`;
     const newTab = {
       id: tabId,
-      url: '',
-      title: 'New Tab',
-      displayUrl: ''
+      url: initialUrl,
+      title: initialTitle,
+      displayUrl: initialDisplay
     };
     tabs.push(newTab);
     renderTabs();
@@ -65,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const isActive = tab.id === activeTabId;
       
       const tabEl = document.createElement('div');
-      tabEl.className = `flex items-center gap-3 border border-purple-500/30 border-b-0 px-4 py-2 rounded-t-xl min-w-[150px] max-w-[200px] justify-between browser-tab ${isActive ? 'active-tab' : 'bg-[#1a1033]/50'}`;
+      tabEl.className = `flex items-center gap-3 border border-purple-500/30 px-3 py-1.5 rounded-xl min-w-[130px] max-w-[170px] justify-between browser-tab ${isActive ? 'active-tab' : 'bg-[#1a1033]/50'}`;
       
       tabEl.onclick = () => switchTab(tab.id);
 
@@ -74,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
       titleSpan.textContent = tab.title;
 
       const closeBtn = document.createElement('button');
-      closeBtn.className = 'text-purple-400 hover:text-white transition-colors ml-2';
+      closeBtn.className = 'text-purple-400 hover:text-white transition-colors ml-1';
       closeBtn.onclick = (e) => closeTab(e, tab.id);
       
       const icon = document.createElement('i');
@@ -89,34 +101,37 @@ document.addEventListener("DOMContentLoaded", () => {
     lucide.createIcons();
   }
 
+  function processAndNavigate(inputVal) {
+    let finalUrl = '';
+    if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
+      if (inputVal.includes('.') && !inputVal.includes(' ')) {
+        finalUrl = 'https://' + inputVal;
+      } else {
+        finalUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
+      }
+    } else {
+      finalUrl = inputVal;
+    }
+
+    let proxyUrl = finalUrl;
+    if (typeof __uv$config !== 'undefined') {
+      proxyUrl = __uv$config.prefix + __uv$config.encodeUrl(finalUrl);
+    }
+
+    const activeTab = tabs.find(t => t.id === activeTabId);
+    if (activeTab) {
+      activeTab.url = proxyUrl;
+      activeTab.displayUrl = inputVal;
+      activeTab.title = inputVal;
+      switchTab(activeTabId);
+    }
+  }
+
   urlInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      let inputVal = urlInput.value.trim();
-      if (inputVal) {
-        let finalUrl = '';
-        
-        if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
-          if (inputVal.includes('.') && !inputVal.includes(' ')) {
-            finalUrl = 'https://' + inputVal;
-          } else {
-            finalUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
-          }
-        } else {
-          finalUrl = inputVal;
-        }
-
-        let proxyUrl = finalUrl;
-        if (typeof __uv$config !== 'undefined') {
-          proxyUrl = __uv$config.prefix + __uv$config.encodeUrl(finalUrl);
-        }
-
-        const activeTab = tabs.find(t => t.id === activeTabId);
-        if (activeTab) {
-          activeTab.url = proxyUrl;
-          activeTab.displayUrl = inputVal;
-          activeTab.title = inputVal;
-          switchTab(activeTabId);
-        }
+      const val = urlInput.value.trim();
+      if (val) {
+        processAndNavigate(val);
       }
     }
   });
@@ -136,7 +151,30 @@ document.addEventListener("DOMContentLoaded", () => {
     try { browserFrame.contentWindow.history.forward(); } catch(e) {}
   });
 
-  addTabBtn.addEventListener('click', createTab);
+  addTabBtn.addEventListener('click', () => createTab());
 
-  createTab();
+  const urlParams = new URLSearchParams(window.location.search);
+  const queryParam = urlParams.get('q');
+  const siteParam = urlParams.get('site');
+
+  if (queryParam) {
+    createTab();
+    urlInput.value = queryParam;
+    processAndNavigate(queryParam);
+  } else if (siteParam) {
+    let target = '';
+    if (siteParam === 'instagram') target = 'https://instagram.com';
+    if (siteParam === 'discord') target = 'https://discord.com';
+    if (siteParam === 'snapchat') target = 'https://snapchat.com';
+    if (siteParam === 'github') target = 'https://github.com';
+    
+    if (target) {
+      createTab();
+      processAndNavigate(target);
+    } else {
+      createTab();
+    }
+  } else {
+    createTab();
+  }
 });
