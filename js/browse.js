@@ -113,14 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
       finalUrl = inputVal;
     }
 
-    let proxyUrl = finalUrl;
-    if (typeof __uv$config !== 'undefined') {
-      proxyUrl = __uv$config.prefix + __uv$config.encodeUrl(finalUrl);
-    }
-
     const activeTab = tabs.find(t => t.id === activeTabId);
     if (activeTab) {
-      activeTab.url = proxyUrl;
+      activeTab.url = finalUrl;
       activeTab.displayUrl = inputVal;
       activeTab.title = inputVal;
       switchTab(activeTabId);
