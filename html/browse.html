@@ -9,54 +9,72 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/browse.css">
 </head>
-<body class="bg-[#06040a] text-white min-h-screen flex flex-col relative bg-[url('../background.png')] bg-cover bg-center bg-no-repeat fade-in-up">
-  <div class="absolute inset-0 bg-black/70 z-0"></div>
+<body class="bg-[#06040a] text-white h-screen flex flex-col relative bg-[url('../background.png')] bg-cover bg-center bg-no-repeat overflow-hidden">
+  <div class="absolute inset-0 bg-black/75 z-0"></div>
 
-  <header id="floating-header" class="fixed top-4 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-5xl bg-[#0f0921]/90 backdrop-blur-xl border border-purple-500/40 rounded-2xl shadow-[0_0_40px_rgba(147,51,234,0.3)] flex flex-col transition-all duration-300">
-    <div class="flex items-center justify-between px-3 pt-2 bg-[#0a0614]/80 rounded-t-2xl border-b border-purple-500/20">
-      <div id="tabs-list" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1"></div>
-      <div class="flex items-center gap-1">
-        <button id="add-tab-btn" class="text-purple-400 hover:text-white hover:bg-purple-500/20 p-1.5 rounded-lg transition-all">
-          <i data-lucide="plus" class="w-4 h-4"></i>
-        </button>
-        <button id="toggle-header" class="text-purple-400 hover:text-white hover:bg-purple-500/20 p-1.5 rounded-lg transition-all ml-2">
-          <i data-lucide="chevron-up" class="w-4 h-4"></i>
-        </button>
-      </div>
+
+  <header class="relative z-20 flex items-center justify-between px-6 py-4 bg-[#0f0921]/90 backdrop-blur-xl border-b border-purple-500/30 shadow-[0_4px_30px_rgba(147,51,234,0.2)]">
+    <div class="flex items-center gap-4">
+      <a href="../index.html" class="flex items-center justify-center p-2 rounded-xl bg-purple-950/40 border border-purple-500/30 text-purple-200 hover:text-white hover:bg-purple-600/30 transition-all">
+        <i data-lucide="home" class="w-5 h-5"></i>
+      </a>
+      <h1 class="text-xl font-black tracking-wider text-white glow-title">S.V Browse</h1>
     </div>
-
-    <div id="header-controls" class="flex items-center gap-4 p-3 bg-[#130b29]/80 rounded-b-2xl">
-      <div class="flex items-center gap-2 text-purple-300">
-        <a href="../index.html" class="hover:text-white hover:bg-purple-500/20 p-2 rounded-lg transition-all nav-btn flex items-center justify-center">
-          <i data-lucide="home" class="w-5 h-5"></i>
-        </a>
-        <button id="btn-back" class="hover:text-white hover:bg-purple-500/20 p-2 rounded-lg transition-all nav-btn">
-          <i data-lucide="arrow-left" class="w-5 h-5"></i>
-        </button>
-        <button id="btn-forward" class="hover:text-white hover:bg-purple-500/20 p-2 rounded-lg transition-all nav-btn">
-          <i data-lucide="arrow-right" class="w-5 h-5"></i>
-        </button>
-        <button id="btn-reload" class="hover:text-white hover:bg-purple-500/20 p-2 rounded-lg transition-all nav-btn">
-          <i data-lucide="rotate-cw" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="flex-1 flex items-center bg-[#0a0614] border border-purple-500/40 rounded-xl px-5 py-2 search-bar-inner">
-        <i data-lucide="search" class="w-4 h-4 text-purple-400 mr-3"></i>
-        <input id="url-input" type="text" placeholder="Search with DuckDuckGo or enter address" class="bg-transparent w-full outline-none text-sm text-purple-100 placeholder-purple-500/50 font-medium tracking-wide">
-      </div>
+    
+    <div class="flex items-center gap-2 text-purple-300">
+      <button id="btn-back" class="hover:text-white hover:bg-purple-600/30 p-2 rounded-xl border border-purple-500/20 bg-purple-950/40 transition-all">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+      </button>
+      <button id="btn-forward" class="hover:text-white hover:bg-purple-600/30 p-2 rounded-xl border border-purple-500/20 bg-purple-950/40 transition-all">
+        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+      </button>
+      <button id="btn-reload" class="hover:text-white hover:bg-purple-600/30 p-2 rounded-xl border border-purple-500/20 bg-purple-950/40 transition-all">
+        <i data-lucide="rotate-cw" class="w-5 h-5"></i>
+      </button>
     </div>
   </header>
 
-  <main class="relative z-10 w-full flex-1 flex flex-col pt-28 h-screen">
-    <div id="welcome-screen" class="absolute inset-0 flex flex-col items-center justify-center bg-[#06040a]/80 z-20">
-      <div class="animate-float text-center">
-        <h1 class="text-8xl md:text-9xl font-black tracking-widest text-white glow-title select-none mb-4">S.V</h1>
-        <p class="text-purple-300 tracking-[0.25em] uppercase text-sm font-bold drop-shadow-[0_0_10px_rgba(168,85,247,0.8)] bg-black/40 px-6 py-2 rounded-full border border-purple-500/20 inline-block">browse thru S.V!</p>
+
+  <main class="relative z-10 flex-1 flex max-w-7xl w-full mx-auto p-4 md:p-6 gap-4 overflow-hidden">
+
+    <aside class="w-72 bg-[#0f0921]/80 border border-purple-500/30 rounded-2xl backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col p-4 justify-between">
+      <div class="flex flex-col gap-4 overflow-hidden">
+        <div class="flex items-center justify-between px-2">
+          <h2 class="text-xs font-bold tracking-[0.25em] uppercase text-purple-400/70">Tabs</h2>
+          <button id="add-tab-btn" class="flex items-center justify-center p-1.5 rounded-lg bg-purple-600/30 border border-purple-400/40 hover:bg-purple-600/60 text-white transition-all">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+          </button>
+        </div>
+      
+        <div id="tabs-list" class="flex flex-col gap-2 overflow-y-auto no-scrollbar pr-1">
+         
+        </div>
       </div>
-    </div>
-    <iframe id="browser-frame" class="w-full flex-1 border-none hidden z-10 bg-white" src=""></iframe>
+    </aside>
+
+
+    <section class="flex-1 bg-[#0a0614]/70 border border-purple-500/30 rounded-2xl backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col overflow-hidden relative">
+      
+   
+      <div id="welcome-screen" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0614]/90 z-20 p-6">
+        <div class="flex flex-col items-center text-center max-w-xl w-full gap-6 animate-float">
+          <div>
+            <h1 class="text-6xl md:text-7xl font-black tracking-widest text-white glow-title select-none mb-2">S.V - Browse</h1>
+            <p class="text-xs md:text-sm font-bold tracking-[0.2em] text-purple-300/70 uppercase">Search anything, results are proxied thru scramjet</p>
+          </div>
+
+          <div id="home-search-form" class="w-full flex items-center bg-[#06040a] border border-purple-500/40 rounded-2xl px-6 py-4 backdrop-blur-xl shadow-[0_0_30px_rgba(147,51,234,0.3)]">
+            <i data-lucide="search" class="w-5 h-5 text-purple-400 mr-4"></i>
+            <input id="url-input" type="text" placeholder="Search with DuckDuckGo or enter URL..." class="bg-transparent w-full outline-none text-base text-purple-100 placeholder-purple-500/50 font-medium tracking-wide">
+          </div>
+        </div>
+      </div>
+
+
+      <iframe id="browser-frame" class="w-full flex-1 border-none hidden z-10 bg-white" src=""></iframe>
+    </section>
   </main>
+
 
   <button id="openOverlay" class="fixed bottom-6 right-6 z-30 flex items-center justify-center w-14 h-14 bg-purple-900/40 border border-purple-500/50 rounded-2xl text-purple-200 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-500 hover:scale-110 hover:rotate-180 hover:bg-purple-600/30 hover:border-purple-400 hover:text-white hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] cursor-pointer menu-spin">
     <i data-lucide="layout-grid" class="w-7 h-7"></i>
