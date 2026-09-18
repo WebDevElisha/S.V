@@ -7,12 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBack = document.getElementById('btn-back');
   const btnForward = document.getElementById('btn-forward');
   const btnReload = document.getElementById('btn-reload');
-  const btnFullscreen = document.getElementById('btn-fullscreen');
-  const sidebar = document.getElementById('sidebar');
-  const toggleSidebarBtn = document.getElementById('toggle-sidebar');
 
   let tabs = [];
   let activeTabId = null;
+
+  function getSearchUrl(inputVal) {
+    if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
+      if (inputVal.includes('.') && !inputVal.includes(' ')) {
+        return 'https://' + inputVal;
+      } else {
+        return 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
+      }
+    }
+    return inputVal;
+  }
 
   function createTab(url = '', title = 'New Tab') {
     const id = Date.now().toString();
@@ -27,16 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
     tabsList.innerHTML = '';
     tabs.forEach(tab => {
       const tabEl = document.createElement('div');
-      tabEl.className = `flex items-center gap-3 px-4 py-2 rounded-2xl border transition-all cursor-pointer group shrink-0 ${tab.id === activeTabId ? 'bg-purple-600/30 border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.3)] text-white' : 'bg-purple-950/20 border-purple-500/20 hover:bg-purple-900/30 text-purple-300'}`;
+      tabEl.className = `flex items-center gap-3 px-5 py-2.5 rounded-2xl border transition-all cursor-pointer group shrink-0 ${tab.id === activeTabId ? 'bg-purple-600/40 border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.3)] text-white' : 'bg-purple-950/30 border-purple-500/20 hover:bg-purple-900/50 text-purple-300'}`;
       
       const titleSpan = document.createElement('span');
-      titleSpan.className = 'text-xs font-bold tracking-wide truncate max-w-[120px]';
+      titleSpan.className = 'text-sm font-bold tracking-wide truncate max-w-[140px]';
       titleSpan.textContent = tab.title;
       titleSpan.addEventListener('click', () => switchTab(tab.id));
 
       const closeBtn = document.createElement('button');
-      closeBtn.className = 'text-purple-400 hover:text-white p-1 rounded-lg transition-all opacity-60 group-hover:opacity-100';
-      closeBtn.innerHTML = '<i data-lucide="x" class="w-3.5 h-3.5"></i>';
+      closeBtn.className = 'text-purple-400 hover:text-white p-1 rounded-lg transition-all opacity-50 group-hover:opacity-100';
+      closeBtn.innerHTML = '<i data-lucide="x" class="w-4 h-4"></i>';
       closeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         closeTab(tab.id);
@@ -82,16 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadUrl(inputVal) {
     if (!inputVal) return;
-    let targetUrl = inputVal;
-    if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
-      if (inputVal.includes('.') && !inputVal.includes(' ')) {
-        targetUrl = 'https://' + inputVal;
-      } else {
-        targetUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
-      }
-    }
-    
+    const targetUrl = getSearchUrl(inputVal);
     const activeTab = tabs.find(t => t.id === activeTabId);
+    
     if (activeTab) {
       activeTab.url = targetUrl;
       activeTab.title = inputVal;
@@ -111,9 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (addTabBtn) {
-    addTabBtn.addEventListener('click', () => createTab());
-  }
+  if (addTabBtn) addTabBtn.addEventListener('click', () => createTab());
 
   if (btnReload) {
     btnReload.addEventListener('click', () => {
@@ -123,62 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (btnBack) {
-    btnBack.addEventListener('click', () => {
-      try { browserFrame.contentWindow.history.back(); } catch(e) {}
-    });
+  if (btnBack) btnBack.addEventListener('click', () => { try { browserFrame.contentWindow.history.back(); } catch(e) {} });
+  if (btnForward) btnForward.addEventListener('click', () => { try { browserFrame.contentWindow.history.forward(); } catch(e) {} });
+
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get('q');
+  
+  if (query) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    createTab(getSearchUrl(query), query);
+  } else {
+    createTab();
   }
-
-  if (btnForward) {
-    btnForward.addEventListener('click', () => {
-      try { browserFrame.contentWindow.history.forward(); } catch(e) {}
-    });
-  }
-
-  if (btnFullscreen) {
-    btnFullscreen.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    });
-  }
-
-  let isCollapsed = false;
-  if (toggleSidebarBtn && sidebar) {
-    toggleSidebarBtn.addEventListener('click', () => {
-      isCollapsed = !isCollapsed;
-      if (isCollapsed) {
-        sidebar.style.width = '0px';
-        sidebar.style.padding = '0px';
-        sidebar.style.border = 'none';
-        sidebar.style.opacity = '0';
-        sidebar.style.overflow = 'hidden';
-      } else {
-        sidebar.style.width = '14rem';
-        sidebar.style.padding = '0.75rem';
-        sidebar.style.border = '';
-        sidebar.style.opacity = '1';
-      }
-    });
-  }
-
-  document.querySelectorAll('[data-viewport-load]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const href = link.getAttribute('data-viewport-load');
-      const label = link.querySelector('.nav-label')?.textContent || 'Page';
-      
-      const overlay = document.getElementById('overlay');
-      if (overlay) {
-        overlay.style.opacity = '0';
-        overlay.style.pointerEvents = 'none';
-      }
-
-      createTab(href, label);
-    });
-  });
-
-  createTab();
 });
