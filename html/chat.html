@@ -27,89 +27,55 @@
     </div>
   </header>
 
-  <main class="relative z-10 flex-1 flex max-w-7xl w-full mx-auto p-4 md:p-6 gap-4 overflow-hidden">
-    <aside class="w-72 bg-[#0f0921]/80 border border-purple-500/30 rounded-2xl backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col p-4 justify-between">
+  <main class="relative z-10 flex-1 flex max-w-7xl w-full mx-auto p-4 md:p-6 gap-3 overflow-hidden">
+    <aside class="w-64 bg-[#0f0921]/95 border border-purple-500/30 rounded-none backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col p-4 justify-between">
       <div class="flex flex-col gap-4">
         <h2 class="text-xs font-bold tracking-[0.25em] uppercase text-purple-400/70 px-2">Rooms</h2>
         <div class="flex flex-col gap-1">
-          <button class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-purple-600/30 border border-purple-400/50 text-white font-bold text-sm tracking-wide text-left w-full shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+          <button class="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-purple-600/30 border border-purple-400/50 text-white font-bold text-sm tracking-wide text-left w-full shadow-[0_0_15px_rgba(168,85,247,0.3)] cursor-pointer">
             <i data-lucide="hash" class="w-4 h-4 text-purple-300"></i>
             Global Chat
           </button>
         </div>
       </div>
       <div class="flex flex-col gap-2 pt-4 border-t border-purple-500/20">
-        <button class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-purple-950/60 border border-purple-500/40 hover:bg-purple-600/40 text-purple-200 hover:text-white text-xs font-bold tracking-wide transition-all">
+        <button class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-purple-950/60 border border-purple-500/40 hover:bg-purple-600/40 text-purple-200 hover:text-white text-xs font-bold tracking-wide transition-all cursor-pointer">
           <i data-lucide="plus" class="w-4 h-4"></i>
           Create Public Room
         </button>
-        <button class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-purple-950/40 border border-purple-500/30 hover:bg-purple-950/80 text-purple-300 hover:text-white text-xs font-bold tracking-wide transition-all">
+        <button class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-purple-950/40 border border-purple-500/30 hover:bg-purple-950/80 text-purple-300 hover:text-white text-xs font-bold tracking-wide transition-all cursor-pointer">
           <i data-lucide="lock" class="w-4 h-4"></i>
           Create Private Room
         </button>
       </div>
     </aside>
 
-    <section class="flex-1 bg-[#0a0614]/70 border border-purple-500/30 rounded-2xl backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col overflow-hidden">
+    <section class="flex-1 bg-[#0a0614]/70 border border-purple-500/30 rounded-3xl backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col overflow-hidden">
       <div class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
-        <div class="flex items-start gap-4 group hover:bg-purple-950/10 p-2 rounded-xl transition-all">
-          <div class="w-10 h-10 rounded-full bg-purple-900/60 border border-purple-500/40 flex items-center justify-center font-bold text-purple-200 shrink-0">
-            SV
-          </div>
-          <div class="flex flex-col flex-1">
-            <div class="flex items-center gap-3">
-              <span class="font-bold text-sm text-purple-200">S.V User</span>
-              <span class="text-xs text-purple-400/60 font-medium">Today at 4:20 PM</span>
-            </div>
-            <p class="text-sm text-purple-100/90 leading-relaxed mt-1">Welcome to S.V Chat! Firebase integration is coming soon so messages will be live globally.</p>
-          </div>
-        </div>
       </div>
 
       <div class="p-4 bg-[#0f0921]/80 border-t border-purple-500/30">
-        <div class="flex items-center bg-[#06040a] border border-purple-500/40 rounded-xl px-4 py-3 chat-input-container">
+        <div class="flex items-center bg-[#06040a] border border-purple-500/40 rounded-2xl px-4 py-3">
           <input type="text" placeholder="Message #global-chat..." class="bg-transparent w-full outline-none text-sm text-purple-100 placeholder-purple-500/50 font-medium tracking-wide">
-          <button class="text-purple-400 hover:text-white p-2 rounded-lg transition-all">
+          <button class="text-purple-400 hover:text-white p-2 rounded-xl transition-all cursor-pointer">
             <i data-lucide="send" class="w-5 h-5"></i>
           </button>
         </div>
       </div>
     </section>
 
-    <aside class="w-64 bg-[#0f0921]/80 border border-purple-500/30 rounded-2xl backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col p-4">
+    <aside class="w-56 bg-[#0f0921]/95 border border-purple-500/30 rounded-none backdrop-blur-xl shadow-[0_0_40px_rgba(147,51,234,0.2)] flex flex-col p-4">
       <h2 class="text-xs font-bold tracking-[0.25em] uppercase text-purple-400/70 px-2 mb-4">Active Users</h2>
       <div class="flex flex-col gap-2">
-        <div class="flex items-center gap-3 px-2 py-1.5 rounded-xl bg-purple-950/30 border border-purple-500/20">
+        <div class="flex items-center gap-3 px-2 py-1.5 rounded-2xl bg-purple-950/30 border border-purple-500/20">
           <div class="w-8 h-8 rounded-full bg-purple-900/60 border border-purple-500/40 flex items-center justify-center font-bold text-xs text-purple-200">
             SV
           </div>
-          <span class="text-xs font-bold text-purple-200 tracking-wide">S.V User (You)</span>
+          <span class="text-xs font-bold text-purple-200 tracking-wide">S.V User (YOU)</span>
         </div>
       </div>
     </aside>
   </main>
-
-
-  <button id="openOverlay" class="fixed bottom-6 right-6 z-30 flex items-center justify-center w-14 h-14 bg-purple-900/40 border border-purple-500/50 rounded-2xl text-purple-200 backdrop-blur-md shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-500 hover:scale-110 hover:rotate-180 hover:bg-purple-600/30 hover:border-purple-400 hover:text-white hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] cursor-pointer menu-spin">
-    <i data-lucide="layout-grid" class="w-7 h-7"></i>
-  </button>
-
-
-  <div id="overlay" class="fixed inset-0 z-40 bg-[#080511]/85 backdrop-blur-xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-all duration-400">
-    <button id="closeOverlay" class="absolute top-8 right-8 text-purple-300/70 hover:text-white hover:scale-110 transition-all duration-300 cursor-pointer">
-      <i data-lucide="x" class="w-9 h-9"></i>
-    </button>
-    <div class="bg-[#0f0921]/70 p-8 md:p-10 rounded-3xl border border-purple-500/30 shadow-[0_0_50px_rgba(147,51,234,0.25)] flex flex-col items-center gap-6 max-w-md w-full mx-4">
-      <h2 class="text-xs font-bold tracking-[0.3em] uppercase text-purple-300/60 mb-2">Navigation</h2>
-      <div class="grid grid-cols-3 gap-4 w-full">
-        <a href="../index.html" class="nav-card group"><i data-lucide="home" class="nav-icon"></i><span class="nav-label">Home</span></a>
-        <a href="browse.html" class="nav-card group"><i data-lucide="compass" class="nav-icon"></i><span class="nav-label">Browse</span></a>
-        <a href="chat.html" class="nav-card group"><i data-lucide="message-square" class="nav-icon"></i><span class="nav-label">Chat</span></a>
-        <a href="#" class="nav-card group"><i data-lucide="gamepad-2" class="nav-icon"></i><span class="nav-label">Games</span></a>
-        <a href="#" class="nav-card group"><i data-lucide="clapperboard" class="nav-icon"></i><span class="nav-label">Movies</span></a>
-      </div>
-    </div>
-  </div>
 
   <script src="../js/script.js"></script>
 </body>
