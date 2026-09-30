@@ -7,19 +7,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBack = document.getElementById('btn-back');
   const btnForward = document.getElementById('btn-forward');
   const btnReload = document.getElementById('btn-reload');
+  const btnFullscreen = document.getElementById('btn-fullscreen');
 
   let tabs = [];
   let activeTabId = null;
 
-  function getSearchUrl(inputVal) {
+  function getProxiedUrl(inputVal) {
+    if (!inputVal) return '';
+    let targetUrl = inputVal;
     if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
       if (inputVal.includes('.') && !inputVal.includes(' ')) {
-        return 'https://' + inputVal;
+        targetUrl = 'https://' + inputVal;
       } else {
-        return 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
+        targetUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
       }
     }
-    return inputVal;
+    try {
+      return 'wss://nocturne.lol/' + __scramjet$encodeUrl(targetUrl);
+    } catch (e) {
+      return targetUrl;
+    }
   }
 
   function createTab(url = '', title = 'New Tab') {
@@ -65,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         browserFrame.src = tab.url;
         browserFrame.classList.remove('hidden');
         welcomeScreen.classList.add('hidden');
-        if (urlInput) urlInput.value = tab.url;
+        if (urlInput) urlInput.value = tab.title;
       } else {
         browserFrame.src = '';
         browserFrame.classList.add('hidden');
@@ -90,15 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadUrl(inputVal) {
     if (!inputVal) return;
-    const targetUrl = getSearchUrl(inputVal);
+    const proxied = getProxiedUrl(inputVal);
     const activeTab = tabs.find(t => t.id === activeTabId);
     
     if (activeTab) {
-      activeTab.url = targetUrl;
+      activeTab.url = proxied;
       activeTab.title = inputVal;
     }
 
-    browserFrame.src = targetUrl;
+    browserFrame.src = proxied;
     browserFrame.classList.remove('hidden');
     welcomeScreen.classList.add('hidden');
     renderTabs();
@@ -124,13 +131,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnBack) btnBack.addEventListener('click', () => { try { browserFrame.contentWindow.history.back(); } catch(e) {} });
   if (btnForward) btnForward.addEventListener('click', () => { try { browserFrame.contentWindow.history.forward(); } catch(e) {} });
+  
+  if (btnFullscreen) {
+    btnFullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+  }
 
   const params = new URLSearchParams(window.location.search);
   const query = params.get('q');
   
   if (query) {
     window.history.replaceState({}, document.title, window.location.pathname);
-    createTab(getSearchUrl(query), query);
+    createTab(getProxiedUrl(query), query);
   } else {
     createTab();
   }
