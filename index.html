@@ -57,14 +57,27 @@
   <script src="js/script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const homeSearch = document.getElementById('home-search');
-      if (homeSearch) {
-        homeSearch.addEventListener('keydown', (e) => {
+      const homeSearch = t => {
+        if (!t) return '';
+        let u = t.trim();
+        if (!u.startsWith('http://') && !u.startsWith('https://')) {
+          if (u.includes('.') && !u.includes(' ')) {
+            u = 'https://' + u;
+          } else {
+            u = 'https://duckduckgo.com/?q=' + encodeURIComponent(u);
+          }
+        }
+        return 'wss://nocturne.lol/' + __scramjet$encodeUrl(u);
+      };
+
+      const input = document.getElementById('home-search');
+      if (input) {
+        input.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' && e.target.value.trim()) {
             window.location.href = 'html/browse.html?q=' + encodeURIComponent(e.target.value.trim());
           }
         });
-        homeSearch.focus();
+        input.focus();
       }
     });
   </script>
