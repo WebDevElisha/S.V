@@ -9,24 +9,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let allGames = [];
 
-  function normalizeGameUrl(rawUrl, baseUrl) {
-    if (!rawUrl) return '';
-    if (/^https?:\/\//i.test(rawUrl)) return rawUrl;
-    if (/^\/\//.test(rawUrl)) return 'https:' + rawUrl;
-    if (/^data:/i.test(rawUrl)) return rawUrl;
+  function buildGameUrl(item, sourceBase) {
+    let url = item.url || item.link || item.path || '';
 
-    const trimmed = rawUrl.replace(/^\/+/, '');
-    return `${baseUrl.replace(/\/+$/, '')}/${trimmed}`;
+    if (!url) return '';
+
+    if (/^https?:\/\//.test(url)) return url;
+    if (/^\/\//.test(url)) return 'https:' + url;
+
+    url = url.replace(/^\/+/, '');
+    url = url.replace(/\.json$/, '.html');
+
+    return `${sourceBase}/${url}`;
   }
 
-  function normalizeGameImg(rawImg, baseUrl) {
-    if (!rawImg) return `${baseUrl.replace(/\/+$/, '')}/icons/default.png`;
-    if (/^https?:\/\//i.test(rawImg)) return rawImg;
-    if (/^\/\//.test(rawImg)) return 'https:' + rawImg;
-    if (/^data:/i.test(rawImg)) return rawImg;
+  function buildImageUrl(item, sourceBase, sourceName) {
+    let img = item.img || item.image || item.cover || item.icon || '';
 
-    const trimmed = rawImg.replace(/^\/+/, '');
-    return `${baseUrl.replace(/\/+$/, '')}/${trimmed}`;
+    if (/^https?:\/\//.test(img)) return img;
+    if (/^\/\//.test(img)) return 'https:' + img;
+
+    if (img) {
+      img = img.replace(/^\/+/, '');
+      return `${sourceBase}/${img}`;
+    }
+
+    const fallbackId = item.id || item.slug || 'game';
+    return `${sourceBase}/icons/${fallbackId}.png`;
   }
 
   async function fetchCatalog(url) {
@@ -42,31 +51,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function loadAllCatalogs() {
     const sources = [
-      { name: 'seraph', url: 'https://cdn.jsdelivr.net/gh/gmshelf/seraph/seraph.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/seraph' },
-      { name: 'truffled', url: 'https://cdn.jsdelivr.net/gh/gmshelf/truffled/truffled.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/truffled' },
-      { name: 'ugs', url: 'https://cdn.jsdelivr.net/gh/gmshelf/ugs/ugs.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/ugs' },
-      { name: 'ckv', url: 'https://cdn.jsdelivr.net/gh/gmshelf/ckv/ckv.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/ckv' }
+      { name: 'seraph', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/seraph/seraph.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/seraph' },
+      { name: 'truffled', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/truffled/truffled.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/truffled' },
+      { name: 'ugs', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/ugs/ugs.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/ugs' },
+      { name: 'ckv', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/ckv/ckv.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/ckv' }
     ];
 
-    const results = await Promise.all(sources.map((source) => fetchCatalog(source.url)));
+    const results = await Promise.all(sources.map(s => fetchCatalog(s.catalog)));
     const combined = [];
 
-    results.forEach((list, index) => {
-      const source = sources[index];
-      list.forEach((item) => {
-        const normalizedUrl = normalizeGameUrl(item.url || item.link || item.path || item.src || '', source.base);
-        const fallbackImg = `${source.base.replace(/\/+$/, '')}/icons/${item.id || item.slug || 'game'}.png`;
-        const normalizedImg = normalizeGameImg(item.img || item.image || item.cover || item.icon || '', source.base);
+    results.forEach((list, idx) => {
+      const source = sources[idx];
+      list.forEach(item => {
+        const gameUrl = buildGameUrl(item, source.base);
+        const imageUrl = buildImageUrl(item, source.base, source.name);
 
-        combined.push({
-          title: item.title || item.name || 'Untitled',
-          url: normalizedUrl || fallbackImg,
-          img: normalizedImg || fallbackImg
-        });
+        if (gameUrl) {
+          combined.push({
+            title: item.title || item.name || 'Untitled',
+            url: gameUrl,
+            img: imageUrl
+          });
+        }
       });
     });
 
-    allGames = combined.filter((game) => game.title && game.url);
+    allGames = combined;
     renderGames(allGames);
   }
 
@@ -79,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    games.forEach((game) => {
+    games.forEach(game => {
       const card = document.createElement('div');
       card.className = 'group flex flex-col bg-[#0f0921]/60 border border-purple-500/20 hover:border-purple-400/60 rounded-2xl p-3 backdrop-blur-md shadow-[0_4px_20px_rgba(147,51,234,0.15)] hover:shadow-[0_0_30px_rgba(147,51,234,0.25)] cursor-pointer transition-all duration-200';
 
@@ -112,7 +122,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   function openGame(game) {
     if (!game || !game.url) return;
     if (gameTitleDisplay) gameTitleDisplay.textContent = game.title;
-    if (gameFrame) gameFrame.src = game.url;
+    if (gameFrame) {
+      gameFrame.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-presentation');
+      gameFrame.src = game.url;
+    }
     if (gameViewport) gameViewport.classList.remove('hidden');
   }
 
@@ -127,7 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnGameFullscreen.addEventListener('click', () => {
       if (gameViewport) {
         if (!document.fullscreenElement) {
-          gameViewport.requestFullscreen();
+          gameViewport.requestFullscreen().catch(() => {});
         } else {
           document.exitFullscreen();
         }
@@ -138,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (gameSearch) {
     gameSearch.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
-      const filtered = allGames.filter((game) => game.title.toLowerCase().includes(q));
+      const filtered = allGames.filter(g => g.title.toLowerCase().includes(q));
       renderGames(filtered);
     });
   }
