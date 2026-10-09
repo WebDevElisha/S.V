@@ -46,13 +46,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
         }
 
-        let finalUrl = fullUrl;
-        try {
-          if (typeof __scramjet$encodeUrl === 'function' && fullUrl) {
-            finalUrl = 'wss://nocturne.lol/' + __scramjet$encodeUrl(fullUrl);
-          }
-        } catch (e) {}
-
         let rawImg = item.img || item.image || item.cover || '';
         let fullImg = rawImg;
         if (rawImg) {
@@ -66,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         combined.push({
           title: item.title || item.name || 'Untitled',
-          url: finalUrl,
+          url: fullUrl,
           img: fullImg
         });
       });
