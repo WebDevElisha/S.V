@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     gamesGrid.innerHTML = '';
 
     if (games.length === 0) {
-      gamesGrid.innerHTML = '<div class="col-span-full flex items-center justify-center h-64 text-purple-400 font-bold text-base">No games found.</div>';
+      gamesGrid.innerHTML = '<div class=\"col-span-full flex items-center justify-center h-64 text-purple-400 font-bold text-base\">No games found.</div>';
       return;
     }
 
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       img.src = game.img;
       img.alt = game.title;
       img.onerror = () => {
-        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%239333ea" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 8h8v8H8z"/><path d="M8 16l8-8"/></svg>';
+        img.src = 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"%239333ea\" stroke-width=\"1.5\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M8 8h8v8H8z\"/><path d=\"M8 16l8-8\"/></svg>';
       };
 
       imgContainer.appendChild(img);
