@@ -6,17 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const gameTitleDisplay = document.getElementById('game-title-display');
   const btnCloseGame = document.getElementById('btn-close-game');
   const btnGameFullscreen = document.getElementById('btn-game-fullscreen');
-  const btnAllowGame = document.getElementById('btn-allow-game');
 
-  const iframePermissions = 'autoplay; fullscreen; clipboard-write; gamepad; encrypted-media; picture-in-picture; web-share; microphone; camera; display-capture';
   let allGames = [];
-
-  function applyIframePermissions() {
-    if (!gameFrame) return;
-    gameFrame.allow = iframePermissions;
-    gameFrame.setAttribute('allowfullscreen', 'true');
-    gameFrame.setAttribute('allowpaymentrequest', 'true');
-  }
 
   function normalizeGameUrl(rawUrl, baseUrl) {
     if (!rawUrl) return '';
@@ -120,7 +111,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function openGame(game) {
     if (!game || !game.url) return;
-    applyIframePermissions();
     if (gameTitleDisplay) gameTitleDisplay.textContent = game.title;
     if (gameFrame) gameFrame.src = game.url;
     if (gameViewport) gameViewport.classList.remove('hidden');
@@ -145,19 +135,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  if (btnAllowGame) {
-    btnAllowGame.addEventListener('click', () => {
-      applyIframePermissions();
-      if (gameFrame && gameFrame.src) {
-        const current = gameFrame.src;
-        gameFrame.src = '';
-        requestAnimationFrame(() => {
-          gameFrame.src = current;
-        });
-      }
-    });
-  }
-
   if (gameSearch) {
     gameSearch.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
@@ -166,6 +143,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  applyIframePermissions();
   loadAllCatalogs();
 });
