@@ -33,11 +33,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     let combined = [];
     results.forEach((list, idx) => {
       const sourceName = sources[idx].name;
+      const baseCdn = `https://cdn.jsdelivr.net/gh/gmshelf/${sourceName}/`;
+      
       list.forEach(item => {
+        let rawUrl = item.url || item.link || item.path || '';
+        let fullUrl = rawUrl;
+        
+        if (rawUrl) {
+          if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
+            const cleanPath = rawUrl.startsWith('/') ? rawUrl.slice(1) : rawUrl;
+            fullUrl = baseCdn + cleanPath;
+          }
+        }
+
+        let finalUrl = fullUrl;
+        try {
+          if (typeof __scramjet$encodeUrl === 'function' && fullUrl) {
+            finalUrl = 'wss://nocturne.lol/' + __scramjet$encodeUrl(fullUrl);
+          }
+        } catch (e) {}
+
+        let rawImg = item.img || item.image || item.cover || '';
+        let fullImg = rawImg;
+        if (rawImg) {
+          if (!rawImg.startsWith('http://') && !rawImg.startsWith('https://')) {
+            const cleanImgPath = rawImg.startsWith('/') ? rawImg.slice(1) : rawImg;
+            fullImg = baseCdn + cleanImgPath;
+          }
+        } else {
+          fullImg = `${baseCdn}icons/${item.id || item.slug || ''}.png`;
+        }
+
         combined.push({
           title: item.title || item.name || 'Untitled',
-          url: item.url || item.link || item.path || '',
-          img: item.img || item.image || item.cover || `https://cdn.jsdelivr.net/gh/gmshelf/${sourceName}/icons/${item.id || item.slug || ''}.png`
+          url: finalUrl,
+          img: fullImg
         });
       });
     });
