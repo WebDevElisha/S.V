@@ -26,7 +26,7 @@
         <i data-lucide="message-square" class="w-4 h-4"></i>
         Chat
       </a>
-      <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-purple-950/40 border border-purple-500/30 text-purple-300 hover:text-white hover:bg-purple-900/40 font-bold text-xs uppercase tracking-wider transition-all">
+      <a href="html/games.html" class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-purple-950/40 border border-purple-500/30 text-purple-300 hover:text-white hover:bg-purple-900/40 font-bold text-xs uppercase tracking-wider transition-all">
         <i data-lucide="gamepad-2" class="w-4 h-4"></i>
         Games
       </a>
@@ -57,27 +57,14 @@
   <script src="js/script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const homeSearch = t => {
-        if (!t) return '';
-        let u = t.trim();
-        if (!u.startsWith('http://') && !u.startsWith('https://')) {
-          if (u.includes('.') && !u.includes(' ')) {
-            u = 'https://' + u;
-          } else {
-            u = 'https://duckduckgo.com/?q=' + encodeURIComponent(u);
-          }
-        }
-        return 'wss://nocturne.lol/' + __scramjet$encodeUrl(u);
-      };
-
-      const input = document.getElementById('home-search');
-      if (input) {
-        input.addEventListener('keydown', (e) => {
+      const homeSearch = document.getElementById('home-search');
+      if (homeSearch) {
+        homeSearch.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' && e.target.value.trim()) {
             window.location.href = 'html/browse.html?q=' + encodeURIComponent(e.target.value.trim());
           }
         });
-        input.focus();
+        homeSearch.focus();
       }
     });
   </script>
