@@ -11,29 +11,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function buildGameUrl(item, sourceBase) {
     let url = item.url || item.link || item.path || '';
-
     if (!url) return '';
-
     if (/^https?:\/\//.test(url)) return url;
     if (/^\/\//.test(url)) return 'https:' + url;
-
     url = url.replace(/^\/+/, '');
     url = url.replace(/\.json$/, '.html');
-
     return `${sourceBase}/${url}`;
   }
 
-  function buildImageUrl(item, sourceBase, sourceName) {
+  function buildImageUrl(item, sourceBase) {
     let img = item.img || item.image || item.cover || item.icon || '';
-
     if (/^https?:\/\//.test(img)) return img;
     if (/^\/\//.test(img)) return 'https:' + img;
-
     if (img) {
       img = img.replace(/^\/+/, '');
       return `${sourceBase}/${img}`;
     }
-
     const fallbackId = item.id || item.slug || 'game';
     return `${sourceBase}/icons/${fallbackId}.png`;
   }
@@ -64,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const source = sources[idx];
       list.forEach(item => {
         const gameUrl = buildGameUrl(item, source.base);
-        const imageUrl = buildImageUrl(item, source.base, source.name);
+        const imageUrl = buildImageUrl(item, source.base);
 
         if (gameUrl) {
           combined.push({
@@ -85,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     gamesGrid.innerHTML = '';
 
     if (games.length === 0) {
-      gamesGrid.innerHTML = '<div class=\"col-span-full flex items-center justify-center h-64 text-purple-400 font-bold text-base\">No games found.</div>';
+      gamesGrid.innerHTML = '<div class="col-span-full flex items-center justify-center h-64 text-purple-400 font-bold text-base">No games found.</div>';
       return;
     }
 
@@ -101,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       img.src = game.img;
       img.alt = game.title;
       img.onerror = () => {
-        img.src = 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"%239333ea\" stroke-width=\"1.5\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M8 8h8v8H8z\"/><path d=\"M8 16l8-8\"/></svg>';
+        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%239333ea" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 8h8v8H8z"/><path d="M8 16l8-8"/></svg>';
       };
 
       imgContainer.appendChild(img);
@@ -119,20 +112,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (window.lucide) lucide.createIcons();
   }
 
-  function openGame(game) {
+  async function openGame(game) {
     if (!game || !game.url) return;
     if (gameTitleDisplay) gameTitleDisplay.textContent = game.title;
-    if (gameFrame) {
-      gameFrame.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-presentation');
-      gameFrame.src = game.url;
-    }
     if (gameViewport) gameViewport.classList.remove('hidden');
+
+    if (gameFrame) {
+      gameFrame.srcdoc = '<div style="color: #c084fc; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #06040a; font-weight: bold; font-size: 1.2rem;">Loading game...</div>';
+      try {
+        const res = await fetch(game.url);
+        let htmlText = await res.text();
+        const baseFolder = game.url.substring(0, game.url.lastIndexOf('/') + 1);
+
+        if (htmlText.includes('<head>')) {
+          htmlText = htmlText.replace('<head>', `<head><base href="${baseFolder}">`);
+        } else {
+          htmlText = `<base href="${baseFolder}">` + htmlText;
+        }
+
+        gameFrame.srcdoc = htmlText;
+      } catch (e) {
+        gameFrame.srcdoc = '<div style="color: #ef4444; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #06040a; font-weight: bold;">Error loading game content.</div>';
+      }
+    }
   }
 
   if (btnCloseGame) {
     btnCloseGame.addEventListener('click', () => {
       if (gameViewport) gameViewport.classList.add('hidden');
-      if (gameFrame) gameFrame.src = '';
+      if (gameFrame) gameFrame.srcdoc = '';
     });
   }
 
