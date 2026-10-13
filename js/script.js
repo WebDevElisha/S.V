@@ -18,15 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
               targetUrl = "https://duckduckgo.com/?q=" + encodeURIComponent(query);
             }
           }
-          
-          let encoded = targetUrl;
-          try {
-            if (typeof __scramjet$encodeUrl === "function") {
-              encoded = __scramjet$encodeUrl(targetUrl);
-            }
-          } catch (err) {}
 
-          window.location.href = `html/browse.html?q=` + encodeURIComponent(encoded);
+          window.location.href = `html/browse.html?q=` + encodeURIComponent(targetUrl);
         }
       }
     });
@@ -49,19 +42,4 @@ document.addEventListener("DOMContentLoaded", () => {
       overlay.classList.add("opacity-0", "pointer-events-none");
     });
   }
-});
-
-window.addEventListener("load", async () => {
-  if ("serviceWorker" in navigator) {
-    try {
-      await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-    } catch (err) {}
-  }
-
-  try {
-    if (window.BareMux && window.BareMux.BareMuxConnection) {
-      const connection = new window.BareMux.BareMuxConnection("/bare-mux/worker.js");
-      await connection.setTransport("EpoxyTransport", [{ wisp: "wss://nocturne.lol/" }]);
-    }
-  } catch (err) {}
 });
