@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let tabs = [];
   let activeTabId = null;
 
-  function getProxiedUrl(inputVal) {
+  function getNormalizedUrl(inputVal) {
     if (!inputVal) return '';
     let targetUrl = inputVal;
     if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
@@ -22,11 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         targetUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(inputVal);
       }
     }
-    try {
-      return 'wss://nocturne.lol/' + __scramjet$encodeUrl(targetUrl);
-    } catch (e) {
-      return targetUrl;
-    }
+    return targetUrl;
   }
 
   function createTab(url = '', title = 'New Tab') {
@@ -97,15 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadUrl(inputVal) {
     if (!inputVal) return;
-    const proxied = getProxiedUrl(inputVal);
+    const finalUrl = getNormalizedUrl(inputVal);
     const activeTab = tabs.find(t => t.id === activeTabId);
     
     if (activeTab) {
-      activeTab.url = proxied;
+      activeTab.url = finalUrl;
       activeTab.title = inputVal;
     }
 
-    browserFrame.src = proxied;
+    browserFrame.src = finalUrl;
     browserFrame.classList.remove('hidden');
     welcomeScreen.classList.add('hidden');
     renderTabs();
@@ -147,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (query) {
     window.history.replaceState({}, document.title, window.location.pathname);
-    createTab(getProxiedUrl(query), query);
+    createTab(getNormalizedUrl(query), query);
   } else {
     createTab();
   }
