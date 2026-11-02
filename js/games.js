@@ -9,49 +9,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let allGames = [];
 
-  function buildGameUrl(item, siteBase) {
+  function buildGameUrl(item, sourceBase) {
     let url = item.url || item.link || item.path || '';
     if (!url) return '';
     if (/^https?:\/\//.test(url)) return url;
     if (/^\/\//.test(url)) return 'https:' + url;
     url = url.replace(/^\/+/, '');
     url = url.replace(/\.json$/, '.html');
-    return `${siteBase}/${url}`;
+    return `${sourceBase}/${url}`;
   }
 
-  function buildImageUrl(item, siteBase) {
+  function buildImageUrl(item, sourceBase) {
     let img = item.img || item.image || item.cover || item.icon || '';
     if (/^https?:\/\//.test(img)) return img;
     if (/^\/\//.test(img)) return 'https:' + img;
     if (img) {
       img = img.replace(/^\/+/, '');
-      return `${siteBase}/${img}`;
+      return `${sourceBase}/${img}`;
     }
     const fallbackId = item.id || item.slug || 'game';
-    return `${siteBase}/icons/${fallbackId}.png`;
+    return `${sourceBase}/icons/${fallbackId}.png`;
   }
 
   async function fetchCatalog(url) {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
-      const res = await fetch(url, { signal: controller.signal });
-      clearTimeout(timeoutId);
+      const res = await fetch(url);
       if (!res.ok) return [];
       const data = await res.json();
       return Array.isArray(data) ? data : (data.games || data.items || data.list || []);
     } catch (e) {
-      console.warn('Failed to load catalog:', url);
       return [];
     }
   }
 
   async function loadAllCatalogs() {
     const sources = [
-      { name: 'seraph', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/seraph/seraph.json', site: 'https://gmshelf.github.io/seraph' },
-      { name: 'truffled', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/truffled/truffled.json', site: 'https://gmshelf.github.io/truffled' },
-      { name: 'ugs', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/ugs/ugs.json', site: 'https://gmshelf.github.io/ugs' },
-      { name: 'ckv', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/ckv/ckv.json', site: 'https://gmshelf.github.io/ckv' }
+      { name: 'seraph', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/seraph/seraph.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/seraph/seraph' },
+      { name: 'truffled', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/truffled/truffled.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/truffled/truffled' },
+      { name: 'ugs', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/ugs/ugs.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/ugs/ugs' },
+      { name: 'ckv', catalog: 'https://cdn.jsdelivr.net/gh/gmshelf/ckv/ckv.json', base: 'https://cdn.jsdelivr.net/gh/gmshelf/ckv/ckv' }
     ];
 
     const results = await Promise.all(sources.map(s => fetchCatalog(s.catalog)));
@@ -60,8 +56,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     results.forEach((list, idx) => {
       const source = sources[idx];
       list.forEach(item => {
-        const gameUrl = buildGameUrl(item, source.site);
-        const imageUrl = buildImageUrl(item, source.site);
+        const gameUrl = buildGameUrl(item, source.base);
+        const imageUrl = buildImageUrl(item, source.base);
 
         if (gameUrl) {
           combined.push({
@@ -82,11 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     gamesGrid.innerHTML = '';
 
     if (games.length === 0) {
-      gamesGrid.innerHTML = `
-        <div class="col-span-full flex flex-col items-center justify-center h-64 gap-4 text-purple-400 font-bold text-base text-center">
-          <p>Failed to load game catalogs or network blocked.</p>
-          <button onclick="location.reload()" class="px-4 py-2 rounded-xl bg-purple-600/40 border border-purple-400 text-white text-xs uppercase tracking-wider hover:bg-purple-600 transition-all">Retry</button>
-        </div>`;
+      gamesGrid.innerHTML = '<div class="col-span-full flex items-center justify-center h-64 text-purple-400 font-bold text-base">No games found.</div>';
       return;
     }
 
@@ -125,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (gameTitleDisplay) gameTitleDisplay.textContent = game.title;
     if (gameViewport) gameViewport.classList.remove('hidden');
     if (gameFrame) {
+      gameFrame.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-presentation');
       gameFrame.src = game.url;
     }
   }
