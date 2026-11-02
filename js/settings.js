@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyAccentColor(color) {
     document.documentElement.style.setProperty('--accent-color', color);
-    
     const elementsToAccent = document.querySelectorAll('.bg-purple-600\\/30, .bg-purple-600\\/40, .bg-purple-950\\/40, .bg-purple-900\\/40');
     elementsToAccent.forEach(el => {
       el.style.backgroundColor = color + '40';
