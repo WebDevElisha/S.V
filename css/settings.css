@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.glow-title {
+  text-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+}
