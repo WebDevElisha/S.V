@@ -1,6 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
   lucide.createIcons();
 
+  const savedBg = localStorage.getItem('sv_bg');
+  const savedAccent = localStorage.getItem('sv_accent');
+  const savedTheme = localStorage.getItem('sv_theme');
+
+  if (savedBg) {
+    document.body.style.backgroundImage = `url('${savedBg}')`;
+  }
+
+  if (savedAccent) {
+    document.documentElement.style.setProperty('--accent-color', savedAccent);
+    const elementsToAccent = document.querySelectorAll('.bg-purple-600\\/30, .bg-purple-600\\/40, .bg-purple-950\\/40, .bg-purple-900\\/40');
+    elementsToAccent.forEach(el => {
+      el.style.backgroundColor = savedAccent + '40';
+      el.style.borderColor = savedAccent + '80';
+    });
+  }
+
+  if (savedTheme === 'light') {
+    document.body.classList.remove('bg-[#06040a]', 'text-white');
+    document.body.classList.add('bg-gray-100', 'text-gray-900');
+  }
+
   const homeSearchForm = document.getElementById("home-search-form");
   const homeSearchInput = document.getElementById("home-search-input");
 
