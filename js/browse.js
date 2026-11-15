@@ -1,4 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const savedBg = localStorage.getItem('sv_bg');
+  const savedAccent = localStorage.getItem('sv_accent');
+  const savedTheme = localStorage.getItem('sv_theme');
+  const bgOverlay = document.getElementById('bg-overlay');
+
+  if (savedBg) {
+    document.body.style.backgroundImage = `url('${savedBg}')`;
+  }
+
+  if (savedAccent) {
+    document.documentElement.style.setProperty('--accent-color', savedAccent);
+    const elementsToAccent = document.querySelectorAll('.bg-purple-600\\/30, .bg-purple-600\\/40, .bg-purple-950\\/40, .bg-purple-900\\/40');
+    elementsToAccent.forEach(el => {
+      el.style.backgroundColor = savedAccent + '40';
+      el.style.borderColor = savedAccent + '80';
+    });
+  }
+
+  if (savedTheme === 'light') {
+    document.body.classList.remove('bg-[#06040a]', 'text-white');
+    document.body.classList.add('bg-gray-100', 'text-gray-900');
+    if (bgOverlay) bgOverlay.className = 'absolute inset-0 bg-white/80 z-0 transition-colors duration-300';
+  }
+
   const urlInput = document.getElementById('url-input');
   const welcomeScreen = document.getElementById('welcome-screen');
   const browserFrame = document.getElementById('browser-frame');
