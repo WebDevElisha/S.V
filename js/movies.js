@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function fetchMovies(query = '') {
     try {
       const url = query 
-        ? `https://api.themoviedb.org/3/search/movie?api_key=3fd2be6f0c70a2a598f084ddfb75487c&query=${encodeURIComponent(query)}`
-        : `https://api.themoviedb.org/3/trending/movie/day?api_key=3fd2be6f0c70a2a598f084ddfb75487c`;
+        ? `https://moviebackend-gold.vercel.app/api/movies?q=${encodeURIComponent(query)}`
+        : `https://moviebackend-gold.vercel.app/api/movies`;
       
       const res = await fetch(url);
       const data = await res.json();
