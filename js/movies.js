@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!playerModal || !playerFrame) return;
     const title = movie.title || movie.name;
     if (playerTitle) playerTitle.textContent = title;
-    playerFrame.src = `https://vidsrc.to/embed/movie/${movie.id}`;
+    playerFrame.src = `https://vidsrc.sbs/embed/movie/${movie.id}`;
     playerModal.classList.remove('hidden');
   }
 
